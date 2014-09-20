@@ -3,6 +3,18 @@
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
 
+.scoreboard{
+
+  width: 250px;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 5px;
+  border-radius: 3px;
+}
+
 .container {
   margin-left: auto;
   margin-right: auto;
@@ -13,8 +25,7 @@ Feel free to use it if you like. */
   width: 1000px;
   padding: 10px;
 }
-.enemy {
- }
+
 .player {
   fill: black;
   x: 0;
@@ -23,9 +34,19 @@ Feel free to use it if you like. */
   r: 5;
 }
 html {
-  width: 100%;
+/*  width: 100%;
   height: 100%;
-  background: radial-gradient(circle, #fff 0%, #aaa 100%) no-repeat;
+  background: radial-gradient( #fff 0%, #000 100%) no-repeat;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: hidden;*/
+
+  background: #b3dced; /* Old browsers */
+  background: -moz-linear-gradient(top,  #b3dced 0%, #29dfe5 99%, #bce0ee 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b3dced), color-stop(99%,#29dfe5), color-stop(100%,#bce0ee)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #b3dced 0%,#29dfe5 99%,#bce0ee 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #b3dced 0%,#29dfe5 99%,#bce0ee 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #b3dced 0%,#29dfe5 99%,#bce0ee 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #b3dced 0%,#29dfe5 99%,#bce0ee 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3dced', endColorstr='#bce0ee',GradientType=0 ); /* IE6-9 */
+
 }

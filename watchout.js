@@ -5,14 +5,15 @@ var theColor = d3.scale.category10();
 var gameOptions = {
   height: 600,
   width: 1000,
-  nEnemies: 10,
+  nEnemies: 100,
   padding: 10
 }
+
 
 var gameStats = {
   highScore: 0,
   currentScore: 0,
-  collisions: 0
+  collisions: d3.select(".collisions span").data([0]).enter().append(".counter")
 }
 // lets create a board.
 var board = d3.select(".container")
@@ -49,6 +50,7 @@ var buildEnemyList = function(num) {
 // populate board with enemies
 
 var updateEnemies = function(data) {
+  // var enemies = d3.select('.container svg').selectAll('.enemy').data(data)
   var enemies = d3.select('.container svg').selectAll('.enemy').data(data)
   .enter()
   .append("circle")
@@ -62,16 +64,16 @@ var updateEnemies = function(data) {
   .attr("cy", function(d) {
     return d.y;
   })
+  .attr("class", "enemy")
   .attr("fill", function(d, i) {
-    return d.color(i % 3);
+    return d.color(i % 4);
   })
-
+  // .attr("xlink:href", "ani_wasp.gif")
 
   setInterval(function() {
     enemies.transition()
     .duration(5000)
-    .attr("cx", function(d) { return Math.random() * gameOptions.width })
-    .attr("cy", function(d) { return Math.random() * gameOptions.height });
+    .tween('.enemy', customTween);
   }, 4000)
 };
 
@@ -82,31 +84,51 @@ var updateEnemies = function(data) {
 // if collision : do something
 // wrap everything in set interval of 10 ms
 
-function collide(node) {
-  var r = node.radius + 16,
-      nx1 = node.x - r,
-      nx2 = node.x + r,
-      ny1 = node.y - r,
-      ny2 = node.y + r;
-  return function(quad, x1, y1, x2, y2) {
-    if (quad.point && (quad.point !== node)) {
-      var x = node.x - quad.point.x,
-          y = node.y - quad.point.y,
-          l = Math.sqrt(x * x + y * y),
-          r = node.radius + quad.point.radius;
-      if (l < r) {
-        l = (l - r) / l * .5;
-        node.x -= x *= l;
-        node.y -= y *= l;
-        quad.point.x += x;
-        quad.point.y += y;
-      }
+var checkCollision = function(enemy, callback) {
+
+  var player = d3.select(".player");
+  _.each(player, function() {
+    var threshold = player.attr('r') ;
+    var xDiff = parseFloat(enemy.attr('cx')) - player.attr('cx');
+    var yDiff = parseFloat(enemy.attr('cy')) - player.attr('cy');
+
+    var separation = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2))
+    // console.log(separation);
+    if(separation < threshold){
+      callback(player, enemy);
     }
-    return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-  };
+  });
 }
 
+var onCollision = function() {
+  console.log("this is working, probably");
+  gameStats.collisions++;
+}
 
+var customTween = function() {
+  var enemy = d3.select(this);
+  var StartPos = {
+    x: parseFloat(enemy.attr('cx')),
+    y: parseFloat(enemy.attr('cy'))
+  };
+  // console.log(StartPos.x, StartPos.y)
+  var endPos = {
+    x: Math.random() * gameOptions.width,
+    y: Math.random() * gameOptions.height
+  }
+  return function(t) {
+    checkCollision(enemy, onCollision)
+    var enemyNextPos = {
+      x: StartPos.x + (endPos.x - StartPos.x)*t,
+      y: StartPos.y + (endPos.y - StartPos.y)*t
+    }
+    // console.log(dNextPos)
+    enemy.attr('cx', enemyNextPos.x);
+    enemy.attr('cy', enemyNextPos.y);
+  }
+
+
+}
 
 
 // create a player
@@ -118,7 +140,7 @@ var drag = d3.behavior.drag()
 
 board.append("circle")
   .attr('class', 'player')
-  .attr("r", radius)
+  .attr('r', radius)
   .attr("cx", function(d) { return d.x; })
   .attr("cy", function(d) { return d.y; })
   .call(drag);
@@ -130,4 +152,4 @@ function dragmove(d) {
 }
 
 // Function calls!
-updateEnemies(buildEnemyList(100));
+updateEnemies(buildEnemyList(gameOptions.nEnemies));
