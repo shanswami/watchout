@@ -5,7 +5,7 @@
 
 /////////////////////////////////////////
 var radius = 8;
-var enemyRadius = 5;
+var enemyRadius = 20;
 var gameOptions = {
   height: 600,
   width: 1000,
@@ -64,15 +64,18 @@ var updateEnemies = function(data) {
 
   setInterval(function() {
     enemies.transition()
-    .duration(1500)
+    .duration(3000)
     .attr("cx", function(d) { return Math.random() * gameOptions.width })
     .attr("cy", function(d) { return Math.random() * gameOptions.height });
-  }, 1000)
+  }, 4000)
 };
 
 // detect collisions with enemies
-// var collisionCheck = function
-
+// in one instance
+// calculates player poisition as well as every single enemy position
+// using pythagorean eq, store distance from every single enemy to the player
+// if collision : do something
+// wrap everything in set interval of 10 ms
 
 
 
@@ -99,4 +102,4 @@ function dragmove(d) {
 }
 
 // Function calls!
-updateEnemies(buildEnemyList(25));
+updateEnemies(buildEnemyList(40));
