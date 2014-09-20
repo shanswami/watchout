@@ -8,13 +8,24 @@ Feel free to use it if you like. */
   margin-right: auto;
   *zoom: 1;
   padding: 20;
-  border: 2px solid green;
+  border:30px solid transparent;
+  border-image:url(http://www.norabrowndesign.com/css-experiments/images/border3.png) 30 30 round;
   width: 1000px;
   padding: 10px;
 }
 .enemy {
-  fill: red;
-}
+ }
 .player {
-  fill: blue;
+  fill: black;
+  x: 0;
+  y: 0;
+  angle: 0;
+  r: 5;
+}
+html {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, #fff 0%, #aaa 100%) no-repeat;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
